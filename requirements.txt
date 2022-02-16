@@ -1,0 +1,18 @@
+# flask
+# flask-login
+flask-security-too[fsqla, mfa]
+pymysql
+argon2_cffi
+pytest
+cryptography
+# pylint
+# pytest-cov
+# flask_mysqldb
+# flask-wtf
+flake8
+# mccabe
+# flask_sqlalchemy
+bandit
+# pyre
+zxcvbn
+Flask-RESTful
