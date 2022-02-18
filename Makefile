@@ -16,7 +16,7 @@ test:
 
 check:
 	flake8
-	pylint
+	pylint -r y *.py
+	bandit -r .
 
-
-all: lint flake8 bandit
+# all: lint flake8 bandit
