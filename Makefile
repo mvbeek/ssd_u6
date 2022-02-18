@@ -3,9 +3,20 @@ install:
 		pip install -r requirements.txt
 
 lint:
-	pylint app.py
+	pylint -r y *.py
+
+flake8:
+	flake8 *.py
+
+bandit:
+	bandit -r .
 
 test:
 	python -m pytest -vv --cov=app --cov-report=term-missing test_app.py
 
-all: install lint test
+check:
+	flake8
+	pylint
+
+
+all: lint flake8 bandit

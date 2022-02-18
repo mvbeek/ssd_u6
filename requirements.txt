@@ -5,12 +5,12 @@ pymysql
 argon2_cffi
 pytest
 cryptography
-# pylint
+pylint
 # pytest-cov
 # flask_mysqldb
 # flask-wtf
 flake8
-# mccabe
+mccabe
 # flask_sqlalchemy
 bandit
 # pyre

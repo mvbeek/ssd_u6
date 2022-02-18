@@ -1,9 +1,10 @@
-from database import Base
 from flask_security import UserMixin, RoleMixin
-from sqlalchemy import create_engine
 from sqlalchemy.orm import relationship, backref
 from sqlalchemy import Boolean, DateTime, Column, Integer, \
                        String, ForeignKey
+from database import Base
+# from sqlalchemy import create_engine
+
 
 class RolesUsers(Base):
     __tablename__ = 'roles_users'
@@ -11,11 +12,13 @@ class RolesUsers(Base):
     user_id = Column('user_id', Integer(), ForeignKey('user.id'))
     role_id = Column('role_id', Integer(), ForeignKey('role.id'))
 
+
 class Role(Base, RoleMixin):
     __tablename__ = 'role'
     id = Column(Integer(), primary_key=True)
     name = Column(String(80), unique=True)
     description = Column(String(255))
+
 
 class User(Base, UserMixin):
     __tablename__ = 'user'
@@ -32,4 +35,4 @@ class User(Base, UserMixin):
     fs_uniquifier = Column(String(255), unique=True, nullable=False)
     confirmed_at = Column(DateTime())
     roles = relationship('Role', secondary='roles_users',
-    backref=backref('users', lazy='dynamic'))
+                         backref=backref('users', lazy='dynamic'))
