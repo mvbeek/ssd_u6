@@ -9,8 +9,8 @@ from flask_security import verify_password, hash_password, \
                            auth_required
 from flask_security.utils import find_user, login_user
 from flask_security.core import UserMixin
-from database import db_session, init_db
-from models import User, Role
+from api.conf.database import db_session, init_db
+from api.models import User, Role
 
 user_datastore = SQLAlchemySessionUserDatastore(db_session, User, Role)
 

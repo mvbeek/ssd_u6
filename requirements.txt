@@ -1,18 +1,37 @@
-# flask
-# flask-login
+# flask essentials
+flask
+flask-login
 flask-security-too[fsqla, mfa]
+
+# MySQL and a dependent library
 pymysql
-argon2_cffi
-pytest
 cryptography
+
+
+# Password hashing
+argon2_cffi
+# Password Strength Checker
+zxcvbn
+
+# Restful API
+Flask-RESTful
+
+# Test
+pytest
+# API Test Framework
+tavern
+
+# Guideline Enforcement
 pylint
-# pytest-cov
-# flask_mysqldb
-# flask-wtf
 flake8
 mccabe
-# flask_sqlalchemy
+
+
+# SAST
 bandit
 # pyre
-zxcvbn
-Flask-RESTful
+
+## pytest-cov
+# flask_mysqldb
+# flask-wtf
+# flask_sqlalchemy

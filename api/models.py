@@ -2,7 +2,7 @@ from flask_security import UserMixin, RoleMixin
 from sqlalchemy.orm import relationship, backref
 from sqlalchemy import Boolean, DateTime, Column, Integer, \
                        String, ForeignKey
-from database import Base
+from api.conf.database import Base
 # from sqlalchemy import create_engine
 
 

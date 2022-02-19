@@ -1,13 +1,13 @@
 from flask import Flask, render_template_string
 from flask_security import Security, current_user, auth_required, \
      SQLAlchemySessionUserDatastore
-from database import db_session, init_db
-from models import User, Role
+from api.conf.database import db_session, init_db
+from api.models import User, Role
 from api.conf.routes import generate_routes
 
 app = Flask(__name__)
 # app.config.from_object('config.BaseConfig')
-app.config.from_object('config.DevelopmentConfig')
+app.config.from_object('api.conf.security.DevelopmentConfig')
 
 generate_routes(app)
 
