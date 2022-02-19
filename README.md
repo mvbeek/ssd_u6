@@ -4,13 +4,23 @@ Build environment
 python3 -m venv pymyenv
 . pymyenv/bin/activate
 make install
+```
+
+Set Env Variables
+
+```
 export FLASK_APP="app.py"
 python -c 'import secrets; print(secrets.token_urlsafe())'
 export SECRET_KEY="YourSecrets"
 python -c 'import secrets; print(secrets.SystemRandom().getrandbits(128))'
 export SECURITY_PASSWORD_SALT="YourSalt"
+export DATABASE_USER="YourDatabaseUserName"
+export DATABASE_PASSWORD="YourDatabasePassword"
+export DATABASE_HOST="YourDatabaseHost"
+export DATABASE_NAME="YourDatabaseName"
 export -p
 ```
+
 
 You need to run make check and pass all the detected errors before you commit
 
