@@ -1,12 +1,7 @@
 import os
 from datetime import timedelta
 
-SECRET_KEY = os.environ.get("SECRET_KEY")
-if not SECRET_KEY:
-    raise ValueError("No SECRET_KEY set for Flask application")
-SECURITY_PASSWORD_SALT = os.environ.get("SECURITY_PASSWORD_SALT")
-if not SECURITY_PASSWORD_SALT:
-    raise ValueError("No SECURITY_PASSWORD_SALT set for Flask application")
+VALUE_ERROR_MSG = "No %s set for the Env Variable. Go to README for more info."
 
 
 class BaseConfig():
@@ -15,8 +10,17 @@ class BaseConfig():
 
     # the most recommended password hash algorithm by OWASP
     SECURITY_PASSWORD_HASH = 'argon2'  # nosec
-    SECRET_KEY = SECRET_KEY
-    SECURITY_PASSWORD_SALT = SECURITY_PASSWORD_SALT
+
+    # Security Key
+    SECRET_KEY = os.environ.get("SECRET_KEY")
+    if not SECRET_KEY:
+        raise ValueError(VALUE_ERROR_MSG % "SECRET_KEY")
+
+    # Password Salt
+    SECURITY_PASSWORD_SALT = os.environ.get("SECURITY_PASSWORD_SALT")
+    if not SECURITY_PASSWORD_SALT:
+        raise ValueError(VALUE_ERROR_MSG % "SECURITY_PASSWORD_SALT")
+
     SECURITY_REGISTERABLE = True
     SECURITY_SEND_REGISTER_EMAIL = False
     # If we implement TOTP. TBD
