@@ -36,3 +36,15 @@ class User(Base, UserMixin):
     confirmed_at = Column(DateTime())
     roles = relationship('Role', secondary='roles_users',
                          backref=backref('users', lazy='dynamic'))
+
+
+class Report(Base):
+    __tablename__ = 'report'
+    id = Column(Integer, primary_key=True)
+    name = Column(String(255), unique=True)
+    description = Column(String(255))
+    created_at = Column(DateTime())
+    updated_at = Column(DateTime())
+    user_id = Column(Integer, ForeignKey('user.id'))
+    user = relationship('User', backref=backref('reports', lazy='dynamic'))
+    url = Column(String(255))

@@ -83,8 +83,20 @@ HTTPIE Request:
 
 You need to get auth_token with Login API!
 
+### List
+
 HTTPIE Request:
 
 ```
  http GET http://127.0.0.1:5000/api/v1/report/list auth_token=GET_AUTH_TOKEN_WITH_LOGIN_API_AND_PASTE_HERE
 ```
+
+### Upload (Create)
+
+HTTPIE Request:
+
+```
+http -f post http://127.0.0.1:5000/api/v1/report/upload Authentication-Token:GET_AUTH_TOKEN_WITH_LOGIN_API_AND_PASTE_HERE file@FILEPATH_THAT_YOU_WANT_UPLOAD
+```
+
+
