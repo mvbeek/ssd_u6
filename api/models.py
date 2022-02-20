@@ -51,6 +51,7 @@ class Report(Base):
     user_id = Column(Integer, ForeignKey('user.id'))
     user = relationship('User', backref=backref('reports', lazy='dynamic'))
     url = Column(String(255))
+    file_name = Column(String(255))
 
 
 class ReportSchema(SQLAlchemyAutoSchema):

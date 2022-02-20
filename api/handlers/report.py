@@ -1,5 +1,5 @@
 import os
-from flask import request
+from flask import request, send_from_directory
 from pathlib import Path
 from werkzeug.utils import secure_filename
 from flask_restful import Resource
@@ -29,8 +29,7 @@ class List(Resource):
     @auth_required()
     def get():
         reports = Report.query.filter_by(user_id=current_user.id).all()
-        payload = ReportSchema(many=True,
-                               exclude=('url', 'user')).dump(reports)
+        payload = ReportSchema(many=True).dump(reports)
         return render_json(payload, 200)
 
 
@@ -56,7 +55,8 @@ class Upload(Resource):
             report = Report(name=name,
                             description=description,
                             url=file_path,
-                            user_id=current_user.id
+                            user_id=current_user.id,
+                            file_name=filename
                             )
             db_session.add(report)
             db_session.commit()
@@ -64,7 +64,7 @@ class Upload(Resource):
             payload = {
                         "message": "Upload successful.",
                         "filename": filename,
-                        "filepath": file_path,
+                        "reportname": name,
                         "user": current_user.email
                         }
             return render_json(payload, 200)
@@ -76,8 +76,20 @@ class Read(Resource):
     @staticmethod
     @auth_required()
     def get(id):
-        report = Report.query.filter_by(id=id,
-                                        user_id=current_user.id).first()
-        payload = ReportSchema(many=True,
-                               exclude=('url', 'user')).dump(report)
+        report = (Report.query.
+                  filter_by(id=id, user_id=current_user.id).
+                  first())
+        payload = ReportSchema(many=True).dump(report)
         return render_json(payload, 200)
+
+
+class Download(Resource):
+    @staticmethod
+    @auth_required()
+    def get(id):
+        report = (Report.query.
+                  filter_by(id=id, user_id=current_user.id).
+                  first())
+        return send_from_directory('./static/uploads',
+                                   report.file_name,
+                                   as_attachment=True)

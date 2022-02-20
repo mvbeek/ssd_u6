@@ -9,6 +9,7 @@ pymysql
 cryptography
 flask-marshmallow
 marshmallow-sqlalchemy
+flask-migrate
 
 
 # Password hashing

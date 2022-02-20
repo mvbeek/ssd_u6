@@ -99,4 +99,20 @@ HTTPIE Request:
 http -f post http://127.0.0.1:5000/api/v1/report/upload Authentication-Token:GET_AUTH_TOKEN_WITH_LOGIN_API_AND_PASTE_HERE file@FILEPATH_THAT_YOU_WANT_UPLOAD
 ```
 
+### Download
 
+[HTTPIE does not support a binary download](https://httpie.io/docs/cli/binary-data).
+
+Use Curl and specify the name of the file.
+
+```
+curl -H "Authentication-Token:GET_AUTH_TOKEN_WITH_LOGIN_API_AND_PASTE_HERE" http://127.0.0.1:5000/api/v1/report/download/1 -o FILENAME_THAT_YOU_SPECIFY
+```
+
+If you do not specify the output file, then you will get the following warning message.
+
+```
+Warning: Binary output can mess up your terminal. Use "--output -" to tell 
+Warning: curl to output it to your terminal anyway, or consider "--output 
+Warning: <FILE>" to save to a file.
+```
