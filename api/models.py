@@ -1,9 +1,10 @@
+from datetime import datetime
 from flask_security import UserMixin, RoleMixin
 from sqlalchemy.orm import relationship, backref
 from sqlalchemy import Boolean, DateTime, Column, Integer, \
                        String, ForeignKey
+from marshmallow_sqlalchemy import SQLAlchemyAutoSchema
 from api.conf.database import Base
-# from sqlalchemy import create_engine
 
 
 class RolesUsers(Base):
@@ -26,8 +27,8 @@ class User(Base, UserMixin):
     email = Column(String(255), unique=True)
     username = Column(String(255), unique=True, nullable=True)
     password = Column(String(255), nullable=False)
-    last_login_at = Column(DateTime())
-    current_login_at = Column(DateTime())
+    last_login_at = Column(DateTime(), default=datetime.now)
+    current_login_at = Column(DateTime(), default=datetime.now)
     last_login_ip = Column(String(100))
     current_login_ip = Column(String(100))
     login_count = Column(Integer)
@@ -43,8 +44,24 @@ class Report(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String(255), unique=True)
     description = Column(String(255))
-    created_at = Column(DateTime())
-    updated_at = Column(DateTime())
+    created_at = Column(DateTime(), default=datetime.now)
+    updated_at = Column(DateTime(),
+                        default=datetime.now,
+                        onupdate=datetime.now)
     user_id = Column(Integer, ForeignKey('user.id'))
     user = relationship('User', backref=backref('reports', lazy='dynamic'))
     url = Column(String(255))
+
+
+class ReportSchema(SQLAlchemyAutoSchema):
+    class Meta:
+        model = Report
+        include_relationships = True
+        load_instance = True
+
+
+class UserSchema(SQLAlchemyAutoSchema):
+    class Meta:
+        model = User
+        include_relationships = True
+        load_instance = True

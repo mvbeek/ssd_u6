@@ -4,8 +4,11 @@ flask-login
 flask-security-too[fsqla, mfa]
 
 # MySQL and a dependent library
+flask_sqlalchemy
 pymysql
 cryptography
+flask-marshmallow
+marshmallow-sqlalchemy
 
 
 # Password hashing
@@ -34,4 +37,3 @@ bandit
 ## pytest-cov
 # flask_mysqldb
 # flask-wtf
-# flask_sqlalchemy
