@@ -1,5 +1,5 @@
 from flask_restful import Api
-from api.handlers.auth import (Index, Login, Register)
+from api.handlers.auth import (Index, Login, Register, Logout)
 from api.handlers.report import (List, Upload, Read, Download)
 
 
@@ -16,3 +16,4 @@ def generate_routes(app):
     api.add_resource(Upload, '/api/v1/report/upload')
     api.add_resource(Read, '/api/v1/report/read/<int:id>')
     api.add_resource(Download, '/api/v1/report/download/<int:id>')
+    api.add_resource(Logout, '/api/v1/auth/logout')

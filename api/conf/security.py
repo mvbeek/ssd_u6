@@ -40,7 +40,10 @@ class BaseConfig():
     # Store User Tracking Data
     SECURITY_TRACKABLE = True
     SECURITY_CSRF_IGNORE_UNAUTH_ENDPOINTS = False
+
+    # Cookie and Token Expiration
     REMEMBER_COOKIE_DURATION = timedelta(minutes=5)
+    SECURITY_TOKEN_MAX_AGE = 5 * 60  # 5 minutes
 
 
 class DevelopmentConfig(BaseConfig):
