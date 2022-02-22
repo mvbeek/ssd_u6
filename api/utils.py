@@ -25,8 +25,8 @@ def is_password_safe(email, password):
     """
     plv = password_length_validator(password=password) is None
     pcv = password_complexity_validator(password=password,
-                                      is_register=True,
-                                      email=email) is None
+                                        is_register=True,
+                                        email=email) is None
     pbv = password_breached_validator(password=password) is None
     pwn = pwned(password=password) == 0
     return plv and pcv and pbv and pwn

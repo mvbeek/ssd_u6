@@ -1,6 +1,6 @@
 import os
-from flask import request, send_from_directory
 from pathlib import Path
+from flask import request, send_from_directory
 from werkzeug.utils import secure_filename
 from flask_restful import Resource
 from flask_security import auth_required, current_user, \
@@ -68,27 +68,26 @@ class Upload(Resource):
                         "user": current_user.email
                         }
             return render_json(payload, 200)
-        else:
-            return render_json({"error": "Invalid file."}, 422)
+        return render_json({"error": "Invalid file."}, 422)
 
 
 class Read(Resource):
     @staticmethod
     @auth_required()
-    def get(id):
+    def get(report_id):
         report = (Report.query.
-                  filter_by(id=id, user_id=current_user.id).
+                  filter_by(id=report_id, user_id=current_user.id).
                   first())
-        payload = ReportSchema(many=True).dump(report)
+        payload = ReportSchema().dump(report)
         return render_json(payload, 200)
 
 
 class Download(Resource):
     @staticmethod
     @auth_required()
-    def get(id):
+    def get(report_id):
         report = (Report.query.
-                  filter_by(id=id, user_id=current_user.id).
+                  filter_by(id=report_id, user_id=current_user.id).
                   first())
         return send_from_directory('./static/uploads',
                                    report.file_name,

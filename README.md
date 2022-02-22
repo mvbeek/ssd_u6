@@ -96,7 +96,7 @@ HTTPIE Request:
 HTTPIE Request:
 
 ```
-http -f post http://127.0.0.1:5000/api/v1/report/upload Authentication-Token:GET_AUTH_TOKEN_WITH_LOGIN_API_AND_PASTE_HERE file@FILEPATH_THAT_YOU_WANT_UPLOAD
+http -f post http://127.0.0.1:5000/api/v1/report/upload Authentication-Token:GET_AUTH_TOKEN_WITH_LOGIN_API_AND_PASTE_HERE file@FILEPATH_THAT_YOU_WANT_UPLOAD name=REPORT_NAME description=REPORT_DESCRIPTION
 ```
 
 ### Download

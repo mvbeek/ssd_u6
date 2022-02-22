@@ -4,7 +4,7 @@ from sqlalchemy.orm import relationship, backref
 from sqlalchemy import Boolean, DateTime, Column, Integer, \
                        String, ForeignKey
 from marshmallow_sqlalchemy import SQLAlchemyAutoSchema
-from .conf.database import Base
+from api.conf.database import Base
 
 
 class RolesUsers(Base):
