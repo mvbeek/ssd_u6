@@ -1,5 +1,4 @@
 import os
-from datetime import timedelta
 
 VALUE_ERROR_MSG = "No %s set for the Env Variable. Go to README for more info."
 

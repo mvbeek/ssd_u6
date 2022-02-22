@@ -1,4 +1,3 @@
-from calendar import c
 import uuid
 from flask import request
 from flask_restful import Resource
@@ -57,11 +56,8 @@ class Login(Resource):
                        remember=True)
             token = UserMixin.get_auth_token(user)
             db_session.commit()
-            payload = {"message": "Login successful.",
-                       "email": user.email,
-                       "IP": user.current_login_ip,
-                       "login count": user.login_count,
-                       "active": user.active,
+            payload = {"message": "Login successful."
+                                  "Use this auth_token when you call APIs",
                        "auth_token": token,
                        }
             return render_json(payload, 200)
@@ -102,6 +98,7 @@ class Logout(Resource):
         user.fs_uniquifier = uuid.uuid4().hex
         db_session.commit()
         return render_json({"message": "Logout successful."}, 200)
+
 
 class DeleteUser(Resource):
     @staticmethod
