@@ -1,6 +1,6 @@
 import os
 
-VALUE_ERROR_MSG = "No %s set for the Env Variable. Go to README for more info."
+VALUE_ERROR_MSG = "No {} set for the Env Variable. Go to README for more info."
 
 
 class BaseConfig():
@@ -13,12 +13,12 @@ class BaseConfig():
     # Security Key
     SECRET_KEY = os.environ.get("SECRET_KEY")
     if not SECRET_KEY:
-        raise ValueError(VALUE_ERROR_MSG % "SECRET_KEY")
+        raise ValueError(VALUE_ERROR_MSG.format("SECRET_KEY"))
 
     # Password Salt
     SECURITY_PASSWORD_SALT = os.environ.get("SECURITY_PASSWORD_SALT")
     if not SECURITY_PASSWORD_SALT:
-        raise ValueError(VALUE_ERROR_MSG % "SECURITY_PASSWORD_SALT")
+        raise ValueError(VALUE_ERROR_MSG.format("SECURITY_PASSWORD_SALT"))
 
     SECURITY_REGISTERABLE = True
     SECURITY_SEND_REGISTER_EMAIL = False
