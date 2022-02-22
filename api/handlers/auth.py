@@ -18,7 +18,6 @@ class Index(Resource):
     @staticmethod
     @auth_required('token', 'session')
     def get():
-        pass
         payload = {
                    'message': 'Hello Flask Restful Example!',
                    'user': current_user.email
@@ -50,17 +49,15 @@ class Login(Resource):
         if check_credential is False:
             return render_json({"error": "Invalid credentials."}, 401)
 
-        elif check_credential is True:
-            # import pdb; pdb.set_trace()
-            login_user(user,
-                       remember=True)
-            token = UserMixin.get_auth_token(user)
-            db_session.commit()
-            payload = {"message": "Login successful."
-                                  "Use this auth_token when you call APIs",
-                       "auth_token": token,
-                       }
-            return render_json(payload, 200)
+        login_user(user,
+                   remember=True)
+        token = UserMixin.get_auth_token(user)
+        db_session.commit()
+        payload = {"message": "Login successful."
+                   "Use this auth_token when you call APIs",
+                   "auth_token": token,
+                   }
+        return render_json(payload, 200)
 
 
 class Register(Resource):
@@ -89,11 +86,40 @@ class Register(Resource):
         return render_json({"message": "Register successful."}, 200)
 
 
+class ChangePassword(Resource):
+    @staticmethod
+    @auth_required()
+    def post():
+        try:
+            current_password, new_password = (
+                request.json.get("current_password").strip(),
+                request.json.get("new_password").strip())
+        except Exception:
+            return render_json({"message": "Invalid input."}, 422)
+
+        if current_password is None or new_password is None:
+            return render_json({"message": "Invalid input."}, 422)
+
+        if verify_password(current_password, current_user.password) is False:
+            return render_json({"message": "Invalid credentials."}, 401)
+
+        if is_password_safe(current_user.email, new_password) is False:
+            return ({"message": "A vulnerable password."}, 403)
+
+        password = hash_password(new_password)
+        user = User.query.filter_by(id=current_user.id).first()
+        user.password = password
+        user.fs_uniquifier = uuid.uuid4().hex
+        db_session.commit()
+        return render_json({"message": "Change password successful."
+                            "You need to re-login to get new auth_token"}, 200)
+
+
 class Logout(Resource):
     @staticmethod
     @auth_required('token', 'session')
     def get():
-        user = current_user
+        user = User.query.filter_by(id=current_user.id).first()
         # this will immediately logout the user by deleting the token
         user.fs_uniquifier = uuid.uuid4().hex
         db_session.commit()
