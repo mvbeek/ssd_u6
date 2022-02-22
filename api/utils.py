@@ -20,7 +20,7 @@ def is_password_safe(email, password):
         2. Password complexity (password_complexity_validator)
         3. Password breached (password_breached_validator)
         4. How many times password has been leaked (pwned)
-    
+
     If any of the above rules are violated, return False.
     """
     plv = password_length_validator(password=password) is None
@@ -30,4 +30,3 @@ def is_password_safe(email, password):
     pbv = password_breached_validator(password=password) is None
     pwn = pwned(password=password) == 0
     return plv and pcv and pbv and pwn
-
