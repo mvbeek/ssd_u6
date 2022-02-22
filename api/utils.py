@@ -15,19 +15,19 @@ def render_json(payload, code):
 
 def is_password_safe(email, password):
     """
-    Check if password is safe.
-    1. Password length (password_length_validator)
-    2. Password complexity (password_complexity_validator)
-    3. Password breached (password_breached_validator)
-    4. How many times password has been leaked (pwned)
+    Check if password is safe as per the follwing rules:
+        1. Password length (password_length_validator)
+        2. Password complexity (password_complexity_validator)
+        3. Password breached (password_breached_validator)
+        4. How many times password has been leaked (pwned)
+    
+    If any of the above rules are violated, return False.
     """
-    # import pdb; pdb.set_trace()
-    if password_length_validator(password=password) is None and \
-        password_complexity_validator(password=password,
+    plv = password_length_validator(password=password) is None
+    pcv = password_complexity_validator(password=password,
                                       is_register=True,
-                                      email=email) is None and \
-        password_breached_validator(password=password) is None and \
-            pwned(password=password) == 0:
-        return True
-    else:
-        return False
+                                      email=email) is None
+    pbv = password_breached_validator(password=password) is None
+    pwn = pwned(password=password) == 0
+    return plv and pcv and pbv and pwn
+
