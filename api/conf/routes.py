@@ -1,3 +1,6 @@
+'''
+This file takes care of routes.
+'''
 from flask_restful import Api
 from api.handlers.auth import (Index,
                                Login,
@@ -12,6 +15,11 @@ from api.handlers.report import (List,
 
 
 def generate_routes(app):
+    '''
+    Generate routes for the API.
+    Supports multiple versions for the future scalability.
+    Two microservices are supported, auth and report.
+    '''
     api = Api(app)
 
     # auth microservice
