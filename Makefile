@@ -3,7 +3,8 @@ install:
 		pip install -r requirements.txt
 
 lint:
-	pylint -r y *.py
+	pylint *.py &&\
+		pylint ./api
 
 flake8:
 	flake8 *.py
@@ -16,7 +17,8 @@ test:
 
 check:
 	flake8
-	pylint -r y *.py
+	pylint *.py
+	pylint ./api
 	bandit -r .
 
 # all: lint flake8 bandit

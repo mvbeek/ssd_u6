@@ -83,7 +83,8 @@ class Login(Resource):
             },
             "response": {
                 "auth_token": "xxxxxxx.xxxxxx.xxxxx",
-                "message": "Login successful.Use this auth_token when you call APIs"
+                "message": "Login successful.
+                            Use this auth_token when you call APIs"
             }
         }
 

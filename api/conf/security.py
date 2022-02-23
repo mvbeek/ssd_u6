@@ -52,7 +52,8 @@ class BaseConfig():
 
 class DevelopmentConfig(BaseConfig):
     '''
-    DevelopmentConfig class that contains the development environment configuration.
+    DevelopmentConfig class that contains
+    the development environment configuration.
     '''
     DEBUG = True
     TESTING = True
@@ -61,14 +62,17 @@ class DevelopmentConfig(BaseConfig):
 
 class TestingConfig(BaseConfig):
     '''
-    TestingConfig class that contains the testing environment configuration.
+    TestingConfig class that contains
+    the testing environment configuration.
     '''
     DEBUG = False
     TESTING = True
 
+
 class ProductionConfig(BaseConfig):
     '''
-    ProductionConfig class that contains the production environment configuration.
+    ProductionConfig class that contains
+    the production environment configuration.
     '''
     DEBUG = False
     TESTING = False
