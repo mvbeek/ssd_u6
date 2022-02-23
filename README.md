@@ -1,3 +1,33 @@
+# Team Strategy Code Project
+
+###### Shota Kameyama
+###### Mathew Van Beek
+###### Nils Linhoff
+###### Mahamad Ibrahim
+###### Muhammad Nasim Akbary
+
+## Content:
+
+### 1. Introduction
+### 2. How to
+#### 2.1 Purpose and Assumptions
+#### 2.2 Prerequisites
+#### 2.3 How to run Api
+### 3. Discussion 
+### 4. Appendix
+#### 4.1 Test Scripts
+### 5. References
+
+
+
+## 1. Introduction
+
+## 2. How to
+
+### 2.1 Purpose and Assumptions
+
+### 2.2 Prerequisites
+
 
 Build environment
 ```
@@ -28,7 +58,7 @@ You need to run make check and pass all the detected errors before you commit
 make check
 ```
 
-# How to run API
+### 2.3 How to run API
 
 One Terminal
 ```
@@ -116,3 +146,13 @@ Warning: Binary output can mess up your terminal. Use "--output -" to tell
 Warning: curl to output it to your terminal anyway, or consider "--output 
 Warning: <FILE>" to save to a file.
 ```
+
+
+
+## 3. Discussion 
+
+## 4. Appendix
+
+### 4.1 Test Scripts
+
+## 5. References
