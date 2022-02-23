@@ -1,3 +1,14 @@
+'''
+This Python file takes care of models that contain the following:
+    - User
+    - Role
+    - UserRoles
+    - Report
+
+Also Marshmallow is used to serialize and deserialize the models.
+By this library, we can easily create a JSON object from the models.
+'''
+
 from datetime import datetime
 from flask_security import UserMixin, RoleMixin
 from sqlalchemy.orm import relationship, backref
@@ -8,6 +19,9 @@ from api.conf.database import Base
 
 
 class RolesUsers(Base):
+    '''
+    RolesUsers class that contains the relationship between User and Role.
+    '''
     __tablename__ = 'roles_users'
     id = Column(Integer(), primary_key=True)
     user_id = Column('user_id', Integer(), ForeignKey('user.id'))
@@ -15,6 +29,9 @@ class RolesUsers(Base):
 
 
 class Role(Base, RoleMixin):
+    '''
+    Role class that contains the Role information.
+    '''
     __tablename__ = 'role'
     id = Column(Integer(), primary_key=True)
     name = Column(String(80), unique=True)
@@ -22,6 +39,23 @@ class Role(Base, RoleMixin):
 
 
 class User(Base, UserMixin):
+    '''
+    User class that contains the User information, including:
+        - id
+        - email
+        - username
+        - password
+        - last_login_at
+        - current_login_at
+        - last_login_ip
+        - current_login_ip
+        - login_count
+        - active
+        - fs_uniquifier
+            : unique identifier for the user, mainly used for token
+        - confirmed_at
+        - roles
+    '''
     __tablename__ = 'user'
     id = Column(Integer, primary_key=True)
     email = Column(String(255), unique=True)
@@ -40,6 +74,17 @@ class User(Base, UserMixin):
 
 
 class Report(Base):
+    '''
+    Report class that contains the Report information, including:
+        - id
+        - user_id
+        - name
+        - description
+        - created_at
+        - updated_at
+        - url
+        - file_name
+    '''
     __tablename__ = 'report'
     id = Column(Integer, primary_key=True)
     name = Column(String(255), unique=True)
@@ -55,14 +100,26 @@ class Report(Base):
 
 
 class ReportSchema(SQLAlchemyAutoSchema):
+    '''
+    ReportSchema class for serializing the Report model.
+    '''
     class Meta:
+        '''
+        configuration of the ReportSchema class.
+        '''
         model = Report
         include_relationships = True
         load_instance = True
 
 
 class UserSchema(SQLAlchemyAutoSchema):
+    '''
+    UserSchema class for serializing the User model.
+    '''
     class Meta:
+        '''
+        configuration of the UserSchema class.
+        '''
         model = User
         include_relationships = True
         load_instance = True
