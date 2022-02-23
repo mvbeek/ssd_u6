@@ -1,3 +1,9 @@
+'''
+Any configuration that relates to the database.
+It is required to store env variables in the server by
+running `export ENV_VAR=value`.
+e.g. `export DATABASE_USER=hogehoge`
+'''
 import os
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
@@ -40,8 +46,10 @@ Base.query = db_session.query_property()
 
 
 def init_db():
-    # import all modules here that might define models so that
-    # they will be registered properly on the metadata.  Otherwise
-    # you will have to import them first before calling init_db()
-    # import models
+    '''
+    import all modules here that might define models so that
+    they will be registered properly on the metadata.  Otherwise
+    you will have to import them first before calling init_db()
+    import models
+    '''
     Base.metadata.create_all(bind=engine)
