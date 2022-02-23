@@ -22,9 +22,15 @@
 
 ## 1. Introduction
 
+A large organization such as CERN (The European Organization for Nuclear Research) with its numerous laboratories and experiment equipment needs to have a well-organized and safe storage repository for maintenance reports.
+
 ## 2. How to
 
 ### 2.1 Purpose and Assumptions
+
+The purpose of this repository is to provide secure access for qualified personal to maintenances reports of the CERN facility and its laboratories. The induvial reports can be viewed or edited if the user has the corresponding rights.
+
+It is assumed that CERN, an organization with over 2500 employees (CERN, 2020), has several security policies implemented. The security policy should at least encompass GDPR (GDPR compliance checklist - GDPR.eu, no date) and OWASP (OWASP, 2021) recommendations. These should be among other things: pseudonymization of any real user data (e.g. numerical user ID), multi factor authentication, a strong password policy, encryption in transit and at rest, frequent employee training. 
 
 ### 2.2 Prerequisites
 
@@ -156,3 +162,7 @@ Warning: <FILE>" to save to a file.
 ### 4.1 Test Scripts
 
 ## 5. References
+
+OWASP (2021) Top ten web application security risks. Available from: https://owasp.org/www-project-top-ten/ [Accessed February 1 2022]
+GDPR compliance checklist - GDPR.eu (no date). Available from: https://gdpr.eu/checklist/ (Accessed: 18 October 2021).
+
