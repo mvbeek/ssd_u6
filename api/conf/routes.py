@@ -11,7 +11,10 @@ from api.handlers.auth import (Index,
 from api.handlers.report import (List,
                                  Upload,
                                  Read,
-                                 Download)
+                                 UpdateData,
+                                 UpdateFile,
+                                 Download,
+                                 Delete)
 
 
 def generate_routes(app):
@@ -34,4 +37,7 @@ def generate_routes(app):
     api.add_resource(List, '/api/v1/report/list')
     api.add_resource(Upload, '/api/v1/report/upload')
     api.add_resource(Read, '/api/v1/report/read/<int:report_id>')
+    api.add_resource(UpdateData, '/api/v1/report/update_data/<int:report_id>')
+    api.add_resource(UpdateFile, '/api/v1/report/update_file/<int:report_id>')
     api.add_resource(Download, '/api/v1/report/download/<int:report_id>')
+    api.add_resource(Delete, '/api/v1/report/delete/<int:report_id>')

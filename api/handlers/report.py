@@ -114,7 +114,7 @@ class Upload(Resource):
     '''
     @staticmethod
     @auth_required()
-    def post():
+    def put():
         '''
         This method is used for uploading a report.
         '''
@@ -191,6 +191,122 @@ class Read(Resource):
         return render_json(payload, 200)
 
 
+class UpdateData(Resource):
+    '''
+    This class represents the updating of a report.
+    auth_token is necessary.
+
+    method: PUT
+    url: /api/v1/report/update/<report_id>
+    required input parameters:
+        name: report name
+        description: report description
+
+    example httpie request:
+        http PUT http://127.0.0.1:5000/api/v1/report/update/1 \
+            Authentication-Token:GET_AUTH_TOKEN_WITH_LOGIN_API_AND_PASTE_HERE \
+            name='This is report name' \
+            description='This is report description'
+
+    response:
+        {
+            "meta": {
+                "code": 200
+            },
+            "response": {
+                "message": "Report uploaded successfully",
+                "reportname": "This is report name",
+                "user": example@example.com
+            }
+        }
+    '''
+    @staticmethod
+    @auth_required()
+    def put(report_id):
+        '''
+        This method is used for updating a report.
+        '''
+        try:
+            name, description = (
+                request.json['name'].strip(),
+                request.json['description'].strip()
+            )
+        except KeyError:
+            return render_json({"error": "Invalid input."}, 422)
+
+        report = (Report.query.
+                  filter_by(id=report_id, user_id=current_user.id).
+                  first())
+        if name:
+            report.name = name
+        if description:
+            report.description = description
+        db_session.commit()
+        payload = {
+            "message": "Upload successful.",
+            "reportname": name,
+            "user": current_user.email
+            }
+        return render_json(payload, 200)
+
+
+class UpdateFile(Resource):
+    '''
+    This class represents the updating of a report.
+    auth_token is necessary.
+
+    method: PUT
+    url: /api/v1/report/update/<report_id>
+    required input parameters:
+        name: report name
+        description: report description
+
+    example httpie request:
+        http -f PUT http://127.0.0.1:5000/api/v1/report/update/1 \
+            Authentication-Token:GET_AUTH_TOKEN_WITH_LOGIN_API_AND_PASTE_HERE \
+            file@/path/to/file/example.pdf
+
+    response:
+        {
+            "meta": {
+                "code": 200
+            },
+            "response": {
+                "message": "Report uploaded successfully",
+                "filename": "example.pdf",
+                "user": example@example.com
+            }
+        }
+    '''
+    @staticmethod
+    @auth_required()
+    def put(report_id):
+        '''
+        This method is used for updating a report.
+        '''
+        file = (
+            request.files['file']
+        )
+
+        report = (Report.query.
+                  filter_by(id=report_id, user_id=current_user.id).
+                  first())
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file_path = os.path.join(UPLOAD_FOLDER, filename)
+            report.url = file_path
+            report.file_name = filename
+            db_session.commit()
+            file.save(os.path.join(UPLOAD_FOLDER, filename))
+            payload = {
+                        "message": "Upload successful.",
+                        "filename": filename,
+                        "user": current_user.email
+                        }
+            return render_json(payload, 200)
+        return render_json({"error": "Invalid file."}, 422)
+
+
 class Download(Resource):
     '''
     This class represents the downloading of a report.
@@ -230,3 +346,43 @@ class Download(Resource):
         return send_from_directory('./static/uploads',
                                    report.file_name,
                                    as_attachment=True)
+
+
+class Delete(Resource):
+    '''
+    This class represents the deleting of a report.
+    auth_token is necessary.
+
+    method: DELETE
+    url: /api/v1/report/delete/<report_id>
+
+    example httpie request:
+        http DELETE http://127.0.0.1:5000/api/v1/report/delete/1 \
+            Authentication-Token:GET_AUTH_TOKEN_WITH_LOGIN_API_AND_PASTE_HERE
+
+    response:
+        {
+            "meta": {
+                "code": 200
+            },
+            "response": {
+                "message": "Report deleted successfully"
+            }
+        }
+    '''
+
+    @staticmethod
+    @auth_required()
+    def delete(report_id):
+        '''
+        This method is used for deleting a report.
+        '''
+        report = (Report.query.
+                  filter_by(id=report_id, user_id=current_user.id).
+                  first())
+        db_session.delete(report)
+        db_session.commit()
+        payload = {
+                    "message": "Report deleted successfully"
+                    }
+        return render_json(payload, 200)
