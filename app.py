@@ -2,23 +2,57 @@
 This is the main file of the flask app.
 This will run the flask app.
 '''
+import sys
 from flask import Flask
-from flask_security import Security, SQLAlchemySessionUserDatastore
-from api.conf.database import db_session, init_db
-from api.models import User, Role
-from api.conf.routes import generate_routes
 
-app = Flask(__name__)
-# app.config.from_object('api.conf.security.BaseConfig')
-app.config.from_object('api.conf.security.DevelopmentConfig')
 
-generate_routes(app)
+def create_app(test_config=None):
+    '''
+    This is the main function of the flask app.
+    Depending on the environment, it will run the flask app with
+    different configurations.
+    '''
+    # Disable Pylint import-outside-toplevel in this function.
+    # pylint: disable=import-outside-toplevel
+    # create and configure the app
+    app = Flask(__name__, instance_relative_config=True)
 
-# Setup Flask-Security
-user_datastore = SQLAlchemySessionUserDatastore(db_session, User, Role)
-security = Security(app, user_datastore)
+    with app.app_context():
+        app.config.from_object("api.conf.security.BaseConfig")
 
-init_db()
+        if test_config is None or test_config == "prod":
+            app.config.from_object("api.conf.security.ProductionConfig")
+            app.config['ENV'] = "production"
+        elif test_config == "dev":
+            app.config.from_object("api.conf.security.DevelopmentConfig")
+        elif test_config == "test":
+            app.config.from_object("api.conf.security.TestingConfig")
+            app.config['ENV'] = "testing"
+        else:
+            app.config.from_object("api.conf.security.DevelopmentConfig")
+            app.config['ENV'] = "development"
 
-if __name__ == '__main__':
-    app.run()
+    app.app_context().push()
+
+    from api.conf.routes import generate_routes
+    from flask_security import Security, SQLAlchemySessionUserDatastore
+    from api.conf.database import db_session, init_db
+    from api.models import User, Role
+
+    generate_routes(app)
+
+    # Setup Flask-Security
+    user_datastore = SQLAlchemySessionUserDatastore(db_session, User, Role)
+    Security(app, user_datastore)
+
+    init_db()
+
+    return app
+
+
+if __name__ == "__main__":
+    if len(sys.argv) > 1:
+        instance = create_app(sys.argv[1])
+    else:
+        instance = create_app()
+    instance.run(port=5000)

@@ -32,7 +32,7 @@ make check
 
 One Terminal
 ```
-flask run
+python3 app.py dev/test/prod
 ```
 
 A different Terminal Run the following as per method you want.

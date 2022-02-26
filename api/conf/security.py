@@ -11,9 +11,6 @@ class BaseConfig():
     BaseConfig class that contains the base configuration.
     Applied to all evironments.
     '''
-    DEBUG = False
-    TESTING = False
-
     # the most recommended password hash algorithm by OWASP
     SECURITY_PASSWORD_HASH = 'argon2'  # nosec
 
@@ -50,26 +47,27 @@ class BaseConfig():
     SECURITY_CSRF_IGNORE_UNAUTH_ENDPOINTS = False
 
 
-class DevelopmentConfig(BaseConfig):
+class DevelopmentConfig():
     '''
     DevelopmentConfig class that contains
     the development environment configuration.
     '''
     DEBUG = True
     TESTING = True
-    FLASK_ENV = 'development'
+    ENV = 'development'
 
 
-class TestingConfig(BaseConfig):
+class TestingConfig():
     '''
     TestingConfig class that contains
     the testing environment configuration.
     '''
     DEBUG = False
     TESTING = True
+    ENV = 'testing'
 
 
-class ProductionConfig(BaseConfig):
+class ProductionConfig():
     '''
     ProductionConfig class that contains
     the production environment configuration.
