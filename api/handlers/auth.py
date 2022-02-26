@@ -10,7 +10,7 @@ from flask_security import verify_password, hash_password, \
                            SQLAlchemySessionUserDatastore, \
                            uia_email_mapper, \
                            auth_required
-from flask_security.utils import find_user, login_user, current_user
+from flask_security.utils import login_user, current_user
 from flask_security.core import UserMixin
 from api.conf.database import db_session, init_db
 from api.models import User, Role
@@ -151,19 +151,22 @@ class Register(Resource):
         '''
         This method is used for user registration.
         '''
-        email, password = (
-            request.json.get("email").strip(),
-            request.json.get("password").strip(),
-            )
-
+        try:
+            email, password = (
+                request.json.get("email").strip(),
+                request.json.get("password").strip(),
+                )
+        except (AttributeError, KeyError):
+            return render_json({"message": "Invalid input."}, 422)
+        user = User.query.filter_by(email=email).first()
         if email is None or password is None:
-            return ({"message": "Invalid input."}, 422)
-        if find_user(email) is not None:
-            return ({"message": "Already exists."}, 409)
+            return render_json({"message": "Invalid input."}, 422)
+        if user is not None:
+            return render_json({"message": "Already exists."}, 409)
         if uia_email_mapper(email) is None:
-            return ({"message": "Invalid Email."}, 422)
+            return render_json({"message": "Invalid Email."}, 422)
         if is_password_safe(email, password) is False:
-            return ({"message": "A vulnerable password."}, 403)
+            return render_json({"message": "A vulnerable password."}, 403)
         password = hash_password(password)
         init_db()
         user_datastore.create_user(email=email, password=password)
