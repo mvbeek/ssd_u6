@@ -100,26 +100,26 @@ class Login(Resource):
                 request.json['password'].strip(),
                 )
         except (AttributeError, KeyError):
-            return render_json({'message': 'Invalid input'}, 422)
+            return render_json({'error': 'Invalid input'}, 422)
         if email is None or password is None:
-            return render_json({"message": "Invalid input."}, 422)
+            return render_json({'error': 'Invalid input.'}, 422)
 
         user = User.query.filter_by(email=email).first()
         if user is None:
-            return render_json({"message": "Invalid credentials."}, 401)
+            return render_json({'error': 'Invalid credentials.'}, 401)
 
         check_credential = verify_password(password, user.password)
 
         if check_credential is False:
-            return render_json({"message": "Invalid credentials."}, 401)
+            return render_json({'error': 'Invalid credentials.'}, 401)
 
         login_user(user,
                    remember=True)
         token = UserMixin.get_auth_token(user)
         db_session.commit()
-        payload = {"message": "Login successful."
-                   "Use this auth_token when you call APIs",
-                   "auth_token": token,
+        payload = {'message': 'Login successful.'
+                   'Use this auth_token when you call APIs',
+                   'auth_token': token,
                    }
         return render_json(payload, 200)
 
@@ -155,24 +155,24 @@ class Register(Resource):
         '''
         try:
             email, password = (
-                request.json.get("email").strip(),
-                request.json.get("password").strip(),
+                request.json.get('email').strip(),
+                request.json.get('password').strip(),
                 )
         except (AttributeError, KeyError):
-            return render_json({"message": "Invalid input."}, 422)
+            return render_json({'error': 'Invalid input.'}, 422)
         user = User.query.filter_by(email=email).first()
         if email is None or password is None:
-            return render_json({"message": "Invalid input."}, 422)
+            return render_json({'error': 'Invalid input.'}, 422)
         if user is not None:
-            return render_json({"message": "Already exists."}, 409)
+            return render_json({'error': 'Already exists.'}, 409)
         if uia_email_mapper(email) is None:
-            return render_json({"message": "Invalid Email."}, 422)
+            return render_json({'error': 'Invalid Email.'}, 422)
         if is_password_safe(email, password) is False:
-            return render_json({"message": "A vulnerable password."}, 403)
+            return render_json({'error': 'A vulnerable password.'}, 403)
         password = hash_password(password)
         user_datastore.create_user(email=email, password=password)
         db_session.commit()
-        return render_json({"message": "Register successful."}, 200)
+        return render_json({'message': 'Register successful.'}, 200)
 
 
 class ChangePassword(Resource):
@@ -208,18 +208,18 @@ class ChangePassword(Resource):
         This method is used for user password change.
         '''
         current_password, new_password = (
-            request.json.get("current_password").strip(),
-            request.json.get("new_password").strip()
+            request.json.get('current_password').strip(),
+            request.json.get('new_password').strip()
             )
 
         if current_password is None or new_password is None:
-            return render_json({"message": "Invalid input."}, 422)
+            return render_json({'error': 'Invalid input.'}, 422)
 
         if verify_password(current_password, current_user.password) is False:
-            return render_json({"message": "Invalid credentials."}, 401)
+            return render_json({'error': 'Invalid credentials.'}, 401)
 
         if is_password_safe(current_user.email, new_password) is False:
-            return ({"message": "A vulnerable password."}, 403)
+            return ({'error': 'A vulnerable password.'}, 403)
 
         password = hash_password(new_password)
         user = User.query.filter_by(id=current_user.id).first()
@@ -227,8 +227,8 @@ class ChangePassword(Resource):
         # this will immediately logout the user by deleting the token
         user.fs_uniquifier = uuid.uuid4().hex
         db_session.commit()
-        return render_json({"message": "Change password successful."
-                            "You need to re-login to get new auth_token"}, 200)
+        return render_json({'message': 'Change password successful.'
+                            'You need to re-login to get new auth_token'}, 200)
 
 
 class Logout(Resource):
@@ -253,7 +253,7 @@ class Logout(Resource):
         # this will immediately logout the user by deleting the token
         user.fs_uniquifier = uuid.uuid4().hex
         db_session.commit()
-        return render_json({"message": "Logout successful."}, 200)
+        return render_json({'message': 'Logout successful.'}, 200)
 
 
 class DeleteUser(Resource):
@@ -277,4 +277,4 @@ class DeleteUser(Resource):
         user = current_user
         db_session.delete(user)
         db_session.commit()
-        return render_json({"message": "User deleted."}, 200)
+        return render_json({'message': 'User deleted.'}, 200)

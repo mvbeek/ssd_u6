@@ -31,4 +31,6 @@ class BaseTest(TestCase):
         post_api(self, '/api/v1/auth/register', data=self.registered_user_data)
         res = post_api(
             self, '/api/v1/auth/login', data=self.registered_user_data)
-        self.regisered_auto_token = res['response']['auth_token']
+        self.regisered_auth_token = res['response']['auth_token']
+        self.auth_token_data = json_format(
+            auth_token=self.regisered_auth_token)

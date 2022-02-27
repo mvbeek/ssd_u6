@@ -12,3 +12,11 @@ def format_response(response):
 def post_api(self, url, data=None):
     response = self.app.post(url, data=data, content_type='application/json')
     return json.loads(response.get_data(as_text=True))
+
+
+def get_api(self, url, token=None):
+    response = self.app.get(
+        url,
+        data=token,
+        content_type='application/json')
+    return json.loads(response.get_data(as_text=True))
