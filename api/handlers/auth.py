@@ -12,7 +12,7 @@ from flask_security import verify_password, hash_password, \
                            auth_required
 from flask_security.utils import login_user, current_user
 from flask_security.core import UserMixin
-from api.conf.database import db_session, init_db
+from api.conf.database import db_session
 from api.models import User, Role
 from api.utils import render_json, is_password_safe
 
@@ -94,22 +94,24 @@ class Login(Resource):
         '''
         This method is used for user login.
         '''
-        email, password = (
-            request.json['email'].strip(),
-            request.json['password'].strip(),
-            )
-
+        try:
+            email, password = (
+                request.json['email'].strip(),
+                request.json['password'].strip(),
+                )
+        except (AttributeError, KeyError):
+            return render_json({'message': 'Invalid input'}, 422)
         if email is None or password is None:
-            return render_json({"error": "Invalid input."}, 422)
+            return render_json({"message": "Invalid input."}, 422)
 
         user = User.query.filter_by(email=email).first()
         if user is None:
-            return render_json({"error": "Invalid credentials."}, 401)
+            return render_json({"message": "Invalid credentials."}, 401)
 
         check_credential = verify_password(password, user.password)
 
         if check_credential is False:
-            return render_json({"error": "Invalid credentials."}, 401)
+            return render_json({"message": "Invalid credentials."}, 401)
 
         login_user(user,
                    remember=True)
@@ -168,7 +170,6 @@ class Register(Resource):
         if is_password_safe(email, password) is False:
             return render_json({"message": "A vulnerable password."}, 403)
         password = hash_password(password)
-        init_db()
         user_datastore.create_user(email=email, password=password)
         db_session.commit()
         return render_json({"message": "Register successful."}, 200)

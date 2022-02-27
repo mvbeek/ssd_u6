@@ -1,35 +1,8 @@
-import json
-from app import create_app
-from unittest import TestCase
+from tests.base import BaseTest
+from tests.utils import json_format, format_response, post_api
 
 
-def json_format(**data):
-    return json.dumps(dict(data))
-
-
-def post_api(self, url, data=None):
-    return self.app.post(url, data=data, content_type='application/json')
-
-
-def format_response(response):
-    return json.loads(response.get_data(as_text=True))
-
-
-class TestRegister(TestCase):
-    def setUp(self):
-        self.app = create_app('test').test_client()
-        from api.conf.database import drop_db, init_db, db_session
-        db_session.commit()
-        drop_db()
-        init_db()
-        self.weak_password = 'password'
-        self.strong_password = 'dsafldakjhgdagfd21231gadsgas!DAFa'
-        self.email = 'example@example.com'
-        self.weak_data = json_format(email=self.email,
-                                     password=self.weak_password)
-        self.strong_data = json_format(email=self.email,
-                                       password=self.strong_password)
-
+class TestRegister(BaseTest):
     def test_register_with_weak_password(self):
         response = post_api(self, '/api/v1/auth/register', data=self.weak_data)
         data = format_response(response)
@@ -80,3 +53,92 @@ class TestRegister(TestCase):
         data = format_response(response)
         self.assertEqual(data['meta']['code'], 409)
         self.assertEqual(data['response']['message'], 'Already exists.')
+
+    def test_register_with_leaked_password(self):
+        data = json_format(email=self.email, password=self.leaked_password)
+        response = post_api(self, '/api/v1/auth/register', data=data)
+        data = format_response(response)
+        self.assertEqual(data['meta']['code'], 403)
+        self.assertEqual(data['response']['message'], 'A vulnerable password.')
+
+    def test_register_if_password_is_the_same_as_password(self):
+        data = json_format(email=self.email, password=self.email)
+        response = post_api(self, '/api/v1/auth/register', data=data)
+        data = format_response(response)
+        self.assertEqual(data['meta']['code'], 403)
+        self.assertEqual(data['response']['message'], 'A vulnerable password.')
+
+
+class TestLogin(BaseTest):
+    def test_login_with_user_does_not_exist(self):
+        response = post_api(self, '/api/v1/auth/login', data=self.weak_data)
+        data = format_response(response)
+        self.assertEqual(data['meta']['code'], 401)
+        self.assertEqual(data['response']['message'], 'Invalid credentials.')
+
+    def test_login_with_valid_credentials(self):
+        response = post_api(self, '/api/v1/auth/login',
+                            data=self.registered_user_data)
+        data = format_response(response)
+        self.assertEqual(data['meta']['code'], 200)
+        self.assertRegexpMatches(
+            data['response']['message'], 'Login successful.')
+
+    def test_login_with_wrong_password(self):
+        data = json_format(email=self.registered_user_email,
+                           password=self.wrong_password)
+        response = post_api(self, '/api/v1/auth/login', data=data)
+        data = format_response(response)
+        self.assertEqual(data['meta']['code'], 401)
+        self.assertEqual(data['response']['message'], 'Invalid credentials.')
+
+    def test_login_with_irrelevant_attribute(self):
+        data = json_format(
+            email=self.registered_user_email,
+            password=self.strong_password,
+            irrelevant_attribute='irrelevant_attribute')
+        response = post_api(self, '/api/v1/auth/login', data=data)
+        data = format_response(response)
+        self.assertEqual(data['meta']['code'], 200)
+        self.assertRegexpMatches(
+            data['response']['message'], 'Login successful.')
+
+    def test_login_with_injection_email(self):
+        data = json_format(email=self.injection_email,
+                           password=self.strong_password)
+        response = post_api(self, '/api/v1/auth/login', data=data)
+        data = format_response(response)
+        self.assertEqual(data['meta']['code'], 401)
+        self.assertEqual(data['response']['message'], 'Invalid credentials.')
+
+    def test_login_with_injection_code_in_email(self):
+        data = json_format(email=self.injection_code,
+                           password=self.strong_password)
+        response = post_api(self, '/api/v1/auth/login', data=data)
+        data = format_response(response)
+        self.assertEqual(data['meta']['code'], 401)
+        self.assertEqual(data['response']['message'], 'Invalid credentials.')
+
+    def test_login_with_injection_password(self):
+        data = json_format(email=self.registered_user_email,
+                           password=self.injection_password)
+        response = post_api(self, '/api/v1/auth/login', data=data)
+        data = format_response(response)
+        self.assertEqual(data['meta']['code'], 401)
+        self.assertEqual(data['response']['message'], 'Invalid credentials.')
+
+    def test_login_with_injection_code(self):
+        data = json_format(email=self.registered_user_email,
+                           code=self.injection_code)
+        response = post_api(self, '/api/v1/auth/login', data=data)
+        data = format_response(response)
+        self.assertEqual(data['meta']['code'], 422)
+        self.assertEqual(data['response']['message'], 'Invalid input')
+
+    def test_login_with_path_traversal_attack(self):
+        data = json_format(email=self.path_traversal,
+                           password=self.path_traversal)
+        response = post_api(self, '/api/v1/auth/login', data=data)
+        data = format_response(response)
+        self.assertEqual(data['meta']['code'], 401)
+        self.assertEqual(data['response']['message'], 'Invalid credentials.')
