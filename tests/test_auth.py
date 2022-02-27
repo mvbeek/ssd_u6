@@ -1,4 +1,4 @@
-from tests.base import BaseTest
+from tests.base import BaseTest, LoginTest
 from tests.utils import json_format, post_api, get_api
 
 
@@ -58,7 +58,7 @@ class TestRegister(BaseTest):
         self.assertEqual(res['response']['error'], 'A vulnerable password.')
 
 
-class TestLogin(BaseTest):
+class TestLogin(LoginTest):
     def test_login_with_user_does_not_exist(self):
         res = post_api(self, '/api/v1/auth/login', data=self.weak_data)
         self.assertEqual(res['meta']['code'], 401)
@@ -124,7 +124,7 @@ class TestLogin(BaseTest):
         self.assertEqual(res['response']['error'], 'Invalid credentials.')
 
 
-class TestIndex(BaseTest):
+class TestIndex(LoginTest):
     def test_index_with_valid_auth_token(self):
         res = get_api(self, '/api/v1/auth/index', token=self.auth_token_data)
         self.assertEqual(res['meta']['code'], 200)

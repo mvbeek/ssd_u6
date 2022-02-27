@@ -58,7 +58,7 @@ class User(Base, UserMixin):
     '''
     __tablename__ = 'user'
     id = Column(Integer, primary_key=True)
-    email = Column(String(255), unique=True)
+    email = Column(String(255), unique=True, nullable=False)
     username = Column(String(255), unique=True, nullable=True)
     password = Column(String(255), nullable=False)
     last_login_at = Column(DateTime(), default=datetime.now)
@@ -87,8 +87,8 @@ class Report(Base):
     '''
     __tablename__ = 'report'
     id = Column(Integer, primary_key=True)
-    name = Column(String(255), unique=True)
-    description = Column(String(255))
+    name = Column(String(255), unique=True, nullable=False)
+    description = Column(String(255), nullable=False)
     created_at = Column(DateTime(), default=datetime.now)
     updated_at = Column(DateTime(),
                         default=datetime.now,
@@ -96,7 +96,7 @@ class Report(Base):
     user_id = Column(Integer, ForeignKey('user.id'))
     user = relationship('User', backref=backref('reports', lazy='dynamic'))
     url = Column(String(255))
-    file_name = Column(String(255))
+    file_name = Column(String(255), nullable=False)
 
 
 class ReportSchema(SQLAlchemyAutoSchema):

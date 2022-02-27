@@ -118,17 +118,21 @@ class Upload(Resource):
         '''
         This method is used for uploading a report.
         '''
-        name, description, file = (
-                request.form['name'].strip(),
-                request.form['description'].strip(),
-                request.files['file'],
-        )
-
+        try:
+            name, description, file = (
+                    request.form['name'].strip(),
+                    request.form['description'].strip(),
+                    request.files['file'],
+            )
+        except (KeyError, ValueError, AttributeError):
+            return render_json({'error': 'Invalid input.'}, 422)
         if name is None or description is None or file is None:
             return render_json({"error": "Invalid input."}, 422)
 
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
+            name = secure_filename(name)
+            description = secure_filename(description)
             file_path = os.path.join(UPLOAD_FOLDER, filename)
             report = Report(name=name,
                             description=description,
@@ -143,6 +147,7 @@ class Upload(Resource):
                         "message": "Upload successful.",
                         "filename": filename,
                         "reportname": name,
+                        "description": description,
                         "user": current_user.email
                         }
             return render_json(payload, 200)
