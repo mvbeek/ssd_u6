@@ -133,7 +133,7 @@ class TestIndex(LoginTest):
         self.assertEqual(res['response']['user'], self.registered_user_email)
 
     def test_index_with_invalid_auth_token(self):
-        data = json_format(auth_token="invalidtoken")  # nosec
+        data = json_format(auth_token="invalidtoken")
         res = get_api(self, '/api/v1/auth/index', token=data)
         self.assertEqual(res['meta']['code'], 401)
         self.assertRegexpMatches(

@@ -192,6 +192,9 @@ class Read(Resource):
         report = (Report.query.
                   filter_by(id=report_id, user_id=current_user.id).
                   first())
+        print(report)
+        if report is None:
+            return render_json({'error': 'Report not found or invalid.'}, 404)
         payload = ReportSchema().dump(report)
         return render_json(payload, 200)
 
