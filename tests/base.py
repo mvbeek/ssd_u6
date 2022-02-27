@@ -1,6 +1,6 @@
 from unittest import TestCase
 from app import create_app
-from tests.utils import json_format, post_api, format_response
+from tests.utils import json_format, post_api
 
 
 class BaseTest(TestCase):
@@ -29,6 +29,6 @@ class BaseTest(TestCase):
             email=self.registered_user_email,
             password=self.strong_password)
         post_api(self, '/api/v1/auth/register', data=self.registered_user_data)
-        dat = format_response(post_api(
-            self, '/api/v1/auth/login', data=self.registered_user_data))
-        self.regisered_auto_token = dat['response']['auth_token']
+        res = post_api(
+            self, '/api/v1/auth/login', data=self.registered_user_data)
+        self.regisered_auto_token = res['response']['auth_token']
