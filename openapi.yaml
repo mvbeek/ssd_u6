@@ -1,0 +1,416 @@
+openapi: 3.0.1
+info:
+  title: SSD Team Strategy Flask APIs
+  description: 'This is a description of the API document. You can find out more about Swagger
+    at [http://swagger.io](http://swagger.io) or on [irc.freenode.net, #swagger](http://swagger.io/irc/).'
+  version: 0.1.0
+servers:
+- url: http://127.0.0.1:5000/api
+  description: hogehoge
+tags:
+- name: Auth Microservice
+  description: User Credentials and Session Management
+- name: Report Microservice
+  description: Manage Reports
+paths:
+  /v1/auth/index:
+    get:
+      tags:
+      - Auth Microservice
+      summary: Index
+      description: This will allow you to check if authentication token is valid and correct.
+      security:
+        - header_auth: []
+        - body_auth: []
+      responses:
+        200:
+          description: Request Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponseWithUser'
+        401:
+          description: Not Authenticated or failure
+  /v1/auth/register:
+    post:
+      tags:
+      - Auth Microservice
+      summary: Register user
+      description: Register user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Auth'
+      responses:
+        200:
+          description: Registration Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        403:
+          description: A vulnerable password.
+        409:
+          description: Already Exist
+        422:
+          description: Invalid Input
+  /v1/auth/login:
+    post:
+      tags:
+      - Auth Microservice
+      summary: Login user
+      description: Login user
+      operationId: postAuthLogin
+      requestBody:
+        description: Return Auth Token when Login Success
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Auth'
+        required: true
+      responses:
+        200:
+          description: Registration Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenResponse'
+        401:
+          description: Invalid credentials
+        422:
+          description: Invalid input.
+  /v1/auth/change_password:
+    put:
+      tags:
+      - Auth Microservice
+      summary: Change Password
+      security:
+        - header_auth: []
+        - body_auth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PassChange'
+        required: true
+      responses:
+        200:
+          description: Request Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        401:
+          description: Not Authenticated or failure
+        403:
+          description: A vulnerable password.
+        422:
+          description: Invalid input.
+  /v1/auth/logout:
+    delete:
+      tags:
+      - Auth Microservice
+      summary: Logout and change the auth token
+      security:
+        - header_auth: []
+        - body_auth: []
+      responses:
+        200:
+          description: Request Success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        401:
+          description: Not Authenticated or failure
+  /v1/auth/delete_user:
+    delete:
+      tags:
+      - Auth Microservice
+      summary: Delete logged in user account
+      security:
+        - header_auth: []
+        - body_auth: []
+      responses:
+        200:
+          description: Request Success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        401:
+          description: Not Authenticated or failure
+  /v1/report/upload:
+    post:
+      tags:
+      - Report Microservice
+      summary: Upload a report file
+      security:
+        - header_auth: []
+        - body_auth: []
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+              - description
+              - file
+              - name
+              properties:
+                name:
+                  type: string
+                description:
+                  type: string
+                file:
+                  type: string
+                  format: binary
+        required: true
+      responses:
+        200:
+          description: Request Success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+  /v1/report/list:
+    get:
+      tags:
+      - Report Microservice
+      security:
+        - header_auth: []
+        - body_auth: []
+      responses:
+        200:
+          description: Request Success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListReportResponse'
+  /v1/report/read/{report_id}:
+    get:
+      tags:
+      - Report Microservice
+      summary: Show report details
+      security:
+        - header_auth: []
+        - body_auth: []
+      parameters:
+      - name: report_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: Request Success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListReportResponse'
+  /v1/report/download/{report_id}:
+    get:
+      tags:
+      - Report Microservice
+      summary: Download a report file
+      security:
+        - header_auth: []
+        - body_auth: []
+      parameters:
+      - name: report_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: Request Success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListReportResponse'
+  /v1/report/update_data/{report_id}:
+    put:
+      tags:
+      - Report Microservice
+      summary: Update report data
+      security:
+        - header_auth: []
+        - body_auth: []
+      parameters:
+      - name: report_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: Request Success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListReportResponse'
+  /v1/report/update_file/{report_id}:
+    put:
+      tags:
+      - Report Microservice
+      summary: Update a report file
+      security:
+        - header_auth: []
+        - body_auth: []
+      parameters:
+      - name: report_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: Authentication-Token
+        in: header
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              required:
+              - file
+              properties:
+                file:
+                  type: string
+                  format: binary
+        required: true
+      responses:
+        200:
+          description: Request Success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+  /v1/report/delete/{report_id}:
+    delete:
+      tags:
+      - Report Microservice
+      summary: Delete the specified report
+      security:
+        - header_auth: []
+        - body_auth: []
+      parameters:
+      - name: report_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: Request Success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+components:
+  schemas:
+    Auth:
+      type: object
+      properties:
+        email:
+          type: string
+          description: This should match the email format.
+          example: example@example.com
+        password:
+          type: string
+          description: A weak password, including the leaked passwords, will not be accepted.
+          example: this_should_be_a_strong_password
+    PassChange:
+      type: object
+      properties:
+        current_password:
+          type: string
+        new_password:
+          type: string
+    TokenResponse:
+      type: object
+      properties:
+        meta:
+          $ref: '#/components/schemas/200'
+        response:
+          $ref: '#/components/schemas/auth_token'
+    SuccessResponse:
+      type: object
+      properties:
+        meta:
+          $ref: '#/components/schemas/200'
+        response:
+          $ref: '#/components/schemas/success'
+    SuccessResponseWithUser:
+      type: object
+      properties:
+        meta:
+          $ref: '#/components/schemas/200'
+        response:
+          $ref: '#/components/schemas/user'
+    200:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+          default: 200
+    success:
+      type: object
+      properties:
+        message:
+          type: string
+    user:
+      type: object
+      properties:
+        message:
+          type: string
+        email:
+          type: string
+          example: example@example.com
+    auth_token:
+      type: object
+      properties:
+        message:
+          type: string
+        auth_token:
+          type: string
+    ListReportResponse:
+      type: object
+      properties:
+        meta:
+          $ref: '#/components/schemas/200'
+        response:
+          $ref: '#/components/schemas/list_report_array'
+    list_report_array:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        description:
+          type: string
+        file_name:
+          type: string
+        url:
+          type: string
+        user:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+  securitySchemes:
+    header_auth:
+      type: apiKey
+      in: header
+      name: Authentication-Token
+    body_auth:
+      type: apiKey
+      in: query
+      name: auth_token
