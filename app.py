@@ -47,6 +47,18 @@ def create_app(test_config=None):
 
     init_db()
 
+    @app.after_request
+    def add_header(response):
+        '''
+        As the OWASP ZAP detected X-Content-Type-Options header as a potential
+        security vulnerability, we will add it to the response.
+        Also, add different security practices that Flask recommends.
+        '''
+        response.headers['X-Content-Type-Options'] = 'nosniff'
+        response.headers['X-Frame-Options'] = 'SAMEORIGIN'
+        response.headers['X-XSS-Protection'] = '1; mode=block'
+        response.headers['Content-Security-Policy'] = "default-src 'self'"
+        return response
     return app
 
 
