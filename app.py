@@ -57,7 +57,13 @@ def create_app(test_config=None):
         response.headers['X-Content-Type-Options'] = 'nosniff'
         response.headers['X-Frame-Options'] = 'SAMEORIGIN'
         response.headers['X-XSS-Protection'] = '1; mode=block'
-        response.headers['Content-Security-Policy'] = "default-src 'self'"
+        response.headers['Content-Security-Policy'] = ("default-src 'none';"
+                                                       "script-src 'self';"
+                                                       "connect-src 'self';"
+                                                       "img-src 'self';"
+                                                       "style-src 'self';"
+                                                       "base-uri 'self';"
+                                                       "form-action 'self'")
         return response
     return app
 
