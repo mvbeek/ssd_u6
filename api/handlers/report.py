@@ -114,7 +114,7 @@ class Upload(Resource):
     '''
     @staticmethod
     @auth_required()
-    def put():
+    def post():
         '''
         This method is used for uploading a report.
         '''
