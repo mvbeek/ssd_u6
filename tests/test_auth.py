@@ -123,6 +123,12 @@ class TestLogin(LoginTest):
         self.assertEqual(res['meta']['code'], 401)
         self.assertEqual(res['response']['error'], 'Invalid credentials.')
 
+    def test_login_with_os_command_injenction_attack(self):
+        data = json_format(email="foo-bar@example.com';start-sleep -s 15")
+        res = post_api(self, '/api/v1/auth/login', data=data)
+        self.assertEqual(res['meta']['code'], 422)
+        self.assertEqual(res['response']['error'], 'Invalid input')
+
 
 class TestIndex(LoginTest):
     def test_index_with_valid_auth_token(self):

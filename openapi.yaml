@@ -373,11 +373,13 @@ components:
           type: integer
           format: int32
           default: 200
+          description: A response code.
     success:
       type: object
       properties:
         message:
           type: string
+          description: Success messages.
     user:
       type: object
       properties:

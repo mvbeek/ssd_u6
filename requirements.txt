@@ -22,8 +22,9 @@ Flask-RESTful
 
 # Test
 pytest
+pytest-html
 # API Test Framework
-tavern
+# tavern
 
 # Guideline Enforcement
 pylint
