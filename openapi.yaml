@@ -146,7 +146,7 @@ paths:
       tags:
       - Report Microservice
       summary: Upload a report file
-      description: This API about uploading a report "auth_token is necessary".
+      description: This API about uploading a report.
       security:
         - header_auth: []
         - body_auth: []
@@ -182,7 +182,7 @@ paths:
     get:
       tags:
       - Report Microservice
-      description: To list of all reports of logged in user "auth_token is necessary".
+      description: To list of all reports of logged in user.
       security:
         - header_auth: []
         - body_auth: []
@@ -198,7 +198,7 @@ paths:
       tags:
       - Report Microservice
       summary: Show report details
-      description: This API is to read a report "auth_token is necessary".
+      description: This API is to read a report.
       security:
         - header_auth: []
         - body_auth: []
@@ -222,7 +222,7 @@ paths:
       tags:
       - Report Microservice
       summary: Download a report file
-      description: This API is to Download a report "auth_token is necessary".
+      description: This API is to Download a report.
       security:
         - header_auth: []
         - body_auth: []
@@ -244,7 +244,7 @@ paths:
       tags:
       - Report Microservice
       summary: Update report data
-      description: This API is to update a report "auth_token is necessary".
+      description: This API is to update a report.
       security:
         - header_auth: []
         - body_auth: []
@@ -268,7 +268,7 @@ paths:
       tags:
       - Report Microservice
       summary: Update a report file
-      description: This API is to update a report "auth_token is necessary".
+      description: This API is to update a report.
       security:
         - header_auth: []
         - body_auth: []
@@ -308,7 +308,7 @@ paths:
       tags:
       - Report Microservice
       summary: Delete the specified report
-      description: This API is to Delete a report "auth_token is necessary".
+      description: This API is to Delete a report.
       security:
         - header_auth: []
         - body_auth: []
