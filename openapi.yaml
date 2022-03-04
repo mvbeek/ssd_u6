@@ -146,7 +146,7 @@ paths:
       tags:
       - Report Microservice
       summary: Upload a report file
-      description: This API about uploading a report.
+      description: This API about uploading a report "auth_token is necessary".
       security:
         - header_auth: []
         - body_auth: []
@@ -175,6 +175,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/SuccessResponse'
+        401:
+          description: Invalid credentials
         422:
           description: Invalid input.
 
@@ -182,7 +184,7 @@ paths:
     get:
       tags:
       - Report Microservice
-      description: To list of all reports of logged in user.
+      description: To list of all reports of logged in user "auth_token is necessary".
       security:
         - header_auth: []
         - body_auth: []
@@ -198,7 +200,7 @@ paths:
       tags:
       - Report Microservice
       summary: Show report details
-      description: This API is to read a report.
+      description: This API is to read a report "auth_token is necessary".
       security:
         - header_auth: []
         - body_auth: []
@@ -215,6 +217,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ListReportResponse'
+        401:
+          description: Invalid credentials
         404:
           description: Report not found or invalid.
   /v1/report/download/{report_id}:
@@ -222,7 +226,7 @@ paths:
       tags:
       - Report Microservice
       summary: Download a report file
-      description: This API is to Download a report.
+      description: This API is to Download a report "auth_token is necessary".
       security:
         - header_auth: []
         - body_auth: []
@@ -244,7 +248,7 @@ paths:
       tags:
       - Report Microservice
       summary: Update report data
-      description: This API is to update a report.
+      description: This API is to update a report "auth_token is necessary".
       security:
         - header_auth: []
         - body_auth: []
@@ -261,6 +265,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ListReportResponse'
+        401:
+          description: Invalid credentials
         422:
           description: Invalid input.
   /v1/report/update_file/{report_id}:
@@ -268,7 +274,7 @@ paths:
       tags:
       - Report Microservice
       summary: Update a report file
-      description: This API is to update a report.
+      description: This API is to update a report "auth_token is necessary".
       security:
         - header_auth: []
         - body_auth: []
@@ -301,6 +307,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/SuccessResponse'
+        401:
+          description: Invalid credentials
         422:
           description: Invalid input.
   /v1/report/delete/{report_id}:
@@ -308,7 +316,7 @@ paths:
       tags:
       - Report Microservice
       summary: Delete the specified report
-      description: This API is to Delete a report.
+      description: This API is to Delete a report "auth_token is necessary".
       security:
         - header_auth: []
         - body_auth: []
