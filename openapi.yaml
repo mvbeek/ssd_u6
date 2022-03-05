@@ -146,7 +146,7 @@ paths:
       tags:
       - Report Microservice
       summary: Upload a report file
-      description: This API about uploading a report "auth_token is necessary".
+      description: This API about uploading a report.
       security:
         - header_auth: []
         - body_auth: []
@@ -176,7 +176,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/SuccessResponse'
         401:
-          description: Not Authenticated.
+          description: Not Authenticated 
         422:
           description: Invalid input.
 
@@ -184,7 +184,7 @@ paths:
     get:
       tags:
       - Report Microservice
-      description: To list of all reports of logged in user "auth_token is necessary".
+      description: To list of all reports of logged in user.
       security:
         - header_auth: []
         - body_auth: []
@@ -200,7 +200,7 @@ paths:
       tags:
       - Report Microservice
       summary: Show report details
-      description: This API is to read a report "auth_token is necessary".
+      description: This API is to read a report.
       security:
         - header_auth: []
         - body_auth: []
@@ -218,7 +218,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ListReportResponse'
         401:
-          description: Not Authenticated.
+          description: Not Authenticated 
         404:
           description: Report not found or invalid.
   /v1/report/download/{report_id}:
@@ -226,29 +226,7 @@ paths:
       tags:
       - Report Microservice
       summary: Download a report file
-      description: This API is to Download a report "auth_token is necessary".
-      security:
-        - header_auth: []
-        - body_auth: []
-      parameters:
-      - name: report_id
-        in: path
-        required: true
-        schema:
-          type: string
-      responses:
-        200:
-          description: Request Success.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ListReportResponse'
-  /v1/report/update_data/{report_id}:
-    put:
-      tags:
-      - Report Microservice
-      summary: Update report data
-      description: This API is to update a report "auth_token is necessary".
+      description: This API is to Download a report.
       security:
         - header_auth: []
         - body_auth: []
@@ -266,7 +244,31 @@ paths:
               schema:
                 $ref: '#/components/schemas/ListReportResponse'
         401:
-          description: Not Authenticated.
+          description: Not Authenticated 
+  /v1/report/update_data/{report_id}:
+    put:
+      tags:
+      - Report Microservice
+      summary: Update report data
+      description: This API is to update a report.
+      security:
+        - header_auth: []
+        - body_auth: []
+      parameters:
+      - name: report_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: Request Success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListReportResponse'
+        401:
+          description: Not Authenticated 
         422:
           description: Invalid input.
   /v1/report/update_file/{report_id}:
@@ -274,7 +276,7 @@ paths:
       tags:
       - Report Microservice
       summary: Update a report file
-      description: This API is to update a report "auth_token is necessary".
+      description: This API is to update a report.
       security:
         - header_auth: []
         - body_auth: []
@@ -308,7 +310,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/SuccessResponse'
         401:
-          description: Not Authenticated.
+          description: Not Authenticated 
         422:
           description: Invalid input.
   /v1/report/delete/{report_id}:
@@ -316,7 +318,7 @@ paths:
       tags:
       - Report Microservice
       summary: Delete the specified report
-      description: This API is to Delete a report "auth_token is necessary".
+      description: This API is to Delete a report.
       security:
         - header_auth: []
         - body_auth: []
@@ -381,11 +383,13 @@ components:
           type: integer
           format: int32
           default: 200
+          description: A response code.
     success:
       type: object
       properties:
         message:
           type: string
+          description: Success messages.
     user:
       type: object
       properties:
