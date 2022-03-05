@@ -218,7 +218,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ListReportResponse'
         401:
-          description: Invalid credentials
+          description: Not Authenticated.
         404:
           description: Report not found or invalid.
   /v1/report/download/{report_id}:
