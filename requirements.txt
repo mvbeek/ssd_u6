@@ -11,9 +11,9 @@ flask-marshmallow
 marshmallow-sqlalchemy
 flask-migrate
 
-
 # Password hashing
 argon2_cffi
+
 # Password Strength Checker
 zxcvbn
 
@@ -23,19 +23,11 @@ Flask-RESTful
 # Test
 pytest
 pytest-html
-# API Test Framework
-# tavern
 
 # Guideline Enforcement
 pylint
 flake8
-mccabe
-
+flake8-html
 
 # SAST
 bandit
-# pyre
-
-## pytest-cov
-# flask_mysqldb
-# flask-wtf

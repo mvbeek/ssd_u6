@@ -18,8 +18,8 @@ DATABASE_PASSWORD = os.environ.get("DATABASE_PASSWORD", 'password')
 DATABASE_HOST = os.environ.get("DATABASE_HOST", 'localhost')
 DATABASE_PORT = os.environ.get("DATABASE_PORT", '3306')
 DATABASE_NAME = os.environ.get("DATABASE_NAME", 'u6')
-DATABASE_NAME_TEST = os.environ.get("DATABASE_NAME", 'u6_test')
-DATABASE_NAME_PROD = os.environ.get("DATABASE_NAME", 'u6_prod')
+DATABASE_NAME_TEST = os.environ.get("DATABASE_NAME_TEST", 'u6_test')
+DATABASE_NAME_PROD = os.environ.get("DATABASE_NAME_PROD", 'u6_prod')
 
 if not DATABASE_USER:
     raise ValueError(VALUE_ERROR_MSG.format("DATABASE_USER"))
