@@ -195,6 +195,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ListReportResponse'
+        401:
+          description: Not Authenticated 
   /v1/report/read/{report_id}:
     get:
       tags:
@@ -335,6 +337,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/SuccessResponse'
+        401:
+          description: Not Authenticated 
 components:
   schemas:
     Auth:

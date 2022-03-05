@@ -1,12 +1,19 @@
+'''
+This file takes care of basic configuration of testing scripts.
+'''
+
 import io
 import base64
 from unittest import TestCase
-from app import create_app
-from tests.utils import json_format, post_api
 from werkzeug.datastructures import FileStorage
+from app import create_app
+from .utils import json_format, post_api
 
 
 class BaseTest(TestCase):
+    '''
+    This class method is to run before each test case.
+    '''
 
     def setUp(self):
         self.app = create_app('test').test_client()
@@ -27,27 +34,16 @@ class BaseTest(TestCase):
 
 
 class LoginTest(TestCase):
+    '''
+    This class method is to run before each Login required test case.
+    '''
 
     def setUp(self):
-        self.app = create_app('test').test_client()
-        from api.conf.database import drop_db, init_db, db_session
-        db_session.commit()
-        drop_db()
-        init_db()
-        self.weak_password = 'password'
-        self.strong_password = 'dsafldakjhgdagfd21231gadsgas!DAFa'
-        self.leaked_password = 'mydarlingbob'
-        self.wrong_password = 'wrongpassword'
-        self.email = 'example@example.com'
+        BaseTest.setUp(self)
         self.registered_user_email = 'registered@exmple.com'
         self.injection_password = 'password" or "1=1'
         self.injection_code = "' or 1=1--'"
         self.injection_email = 'example@example.com" or "1=1'
-        self.path_traversal = '../../../'
-        self.weak_data = json_format(email=self.email,
-                                     password=self.weak_password)
-        self.strong_data = json_format(email=self.email,
-                                       password=self.strong_password)
         self.registered_user_data = json_format(
             email=self.registered_user_email,
             password=self.strong_password)
@@ -60,24 +56,12 @@ class LoginTest(TestCase):
 
 
 class ReportTest(TestCase):
+    '''
+    This class method is to run before each Report related test case.
+    '''
 
     def setUp(self):
-        self.app = create_app('test').test_client()
-        from api.conf.database import drop_db, init_db, db_session
-        db_session.commit()
-        drop_db()
-        init_db()
-        self.registered_user_email = 'registered@exmple.com'
-        self.strong_password = 'dsafldakjhgdagfd21231gadsgas!DAFa'
-        self.registered_user_data = json_format(
-            email=self.registered_user_email,
-            password=self.strong_password)
-        post_api(self, '/api/v1/auth/register', data=self.registered_user_data)
-        res = post_api(
-            self, '/api/v1/auth/login', data=self.registered_user_data)
-        self.regisered_auth_token = res['response']['auth_token']
-        self.auth_token_data = json_format(
-            auth_token=self.regisered_auth_token)
+        LoginTest.setUp(self)
         self.blob_data = io.BytesIO(base64.b64decode(b'file contents'))
         self.file = FileStorage(
             stream=self.blob_data,
