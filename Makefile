@@ -22,7 +22,7 @@ test:
 	python3 -m pytest -vv --disable-pytest-warnings --html='./static/reports/pytest_report.html' --self-contained-html
 
 document:
-	redoc-cli bundle openapi.yaml &&\
+	redoc-cli bundle ./config/openapi.yaml &&\
 		mv redoc-static.html static/documents/api-document.html
 
 check:
