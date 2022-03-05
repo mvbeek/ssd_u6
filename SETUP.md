@@ -40,10 +40,16 @@ python3 app.py dev
 
 # API Doc
 
-API Doc is built with `redoc-cli`
+API Doc is built with OpenAPI and `redoc-cli`
 
 ```
 npm install -g redoc-cli
+```
+
+If you want to make API document, run the following code.
+
+```
+make document
 ```
 
 The exported document is published at [ssd_6/static/documents/api-document](https://shotakameyama.github.io/ssd_u6/static/documents/api-document)
@@ -52,6 +58,13 @@ The exported document is published at [ssd_6/static/documents/api-document](http
 
 Pytest/PyLint/Flake8/Bandit are used for the test.
 
+```
+make test
+make lint
+make flake8
+make bandit
+```
+
 The exported documtnes are published below:
 
 - PyTest result at [ssd_6/static/reports/pytest_report](https://shotakameyama.github.io/ssd_u6/static/reports/pytest_report)
@@ -59,6 +72,14 @@ The exported documtnes are published below:
 - Bandit result at [ssd_6/static/reports/bandit_report](https://shotakameyama.github.io/ssd_u6/static/reports/bandit_report)
 
 
+# How to run the automated security testing with OWASP ZAP
+
+As the APIs are defined in the OpenAPI file, OWASP ZAP will provide the automated testing using it.
+
+The exported document is publised below:
+- OWASP ZAP test result at [ssd_u6/static/reports/owasp_zap_report](https://shotakameyama.github.io/ssd_u6/static/reports/owasp_zap_report)
+
+For more details, please read [the official documents](https://www.zaproxy.org/docs/desktop/addons/openapi-support/).
 
 # How to contribute
 

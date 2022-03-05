@@ -24,7 +24,6 @@ UPLOAD_FOLDER = os.path.abspath(
                         'static',
                         'uploads'))
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
-report_datastore = SQLAlchemySessionUserDatastore(db_session, Report, User)
 
 
 def allowed_file(filename):
