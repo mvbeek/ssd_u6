@@ -56,8 +56,8 @@ The exported documtnes are published below:
 
 - PyTest result at [ssd_6/static/reports/pytest_report](https://shotakameyama.github.io/ssd_u6/static/reports/pytest_report)
 - Flake8 result at [ssd_6/static/reports/flake8_report](https://shotakameyama.github.io/ssd_u6/static/reports/flake8_report)
+- Bandit result at [ssd_6/static/reports/bandit_report](https://shotakameyama.github.io/ssd_u6/static/reports/bandit_report)
 
-```
 
 
 # How to contribute
