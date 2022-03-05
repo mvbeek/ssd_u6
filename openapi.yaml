@@ -176,7 +176,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/SuccessResponse'
         401:
-          description: Invalid credentials
+          description: Not Authenticated.
         422:
           description: Invalid input.
 
@@ -266,7 +266,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ListReportResponse'
         401:
-          description: Invalid credentials
+          description: Not Authenticated.
         422:
           description: Invalid input.
   /v1/report/update_file/{report_id}:
@@ -308,7 +308,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/SuccessResponse'
         401:
-          description: Invalid credentials
+          description: Not Authenticated.
         422:
           description: Invalid input.
   /v1/report/delete/{report_id}:
