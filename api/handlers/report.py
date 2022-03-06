@@ -11,10 +11,9 @@ from pathlib import Path
 from flask import request, send_from_directory
 from werkzeug.utils import secure_filename
 from flask_restful import Resource
-from flask_security import auth_required, current_user, \
-                           SQLAlchemySessionUserDatastore
+from flask_security import auth_required, current_user
 from api.utils import render_json
-from api.models import Report, User, ReportSchema
+from api.models import Report, ReportSchema
 from api.conf.database import db_session
 
 # Upload Folder
