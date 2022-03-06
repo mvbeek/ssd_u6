@@ -6,7 +6,7 @@ info:
   version: 0.1.0
 servers:
 - url: http://127.0.0.1:5000/api
-  description: hogehoge
+  description: URL can be changed depending on the domain or url that you generate. 
 tags:
 - name: Auth Microservice
   description: User Credentials and Session Management
@@ -19,6 +19,7 @@ paths:
       - Auth Microservice
       summary: Index
       description: This will allow you to check if authentication token is valid and correct.
+      operationId: getAuthIndex
       security:
         - header_auth: []
         - body_auth: []
@@ -36,7 +37,8 @@ paths:
       tags:
       - Auth Microservice
       summary: Register user
-      description: Register user
+      description: Register user using email and password
+      operationId: postAuthRegister
       requestBody:
         content:
           application/json:
@@ -60,7 +62,7 @@ paths:
       tags:
       - Auth Microservice
       summary: Login user
-      description: Login user
+      description: Login user with authentication token
       operationId: postAuthLogin
       requestBody:
         description: Return Auth Token when Login Success
@@ -85,6 +87,8 @@ paths:
       tags:
       - Auth Microservice
       summary: Change Password
+      description: Change password with authentication token, current password, and new password
+      operationId: putAuthChangePassword
       security:
         - header_auth: []
         - body_auth: []
@@ -112,6 +116,7 @@ paths:
       tags:
       - Auth Microservice
       summary: Logout and change the auth token
+      operationId: deleteAuthLogout
       security:
         - header_auth: []
         - body_auth: []
@@ -129,6 +134,7 @@ paths:
       tags:
       - Auth Microservice
       summary: Delete logged in user account
+      operationId: deleteAuthDeleteUser
       security:
         - header_auth: []
         - body_auth: []
@@ -147,6 +153,7 @@ paths:
       - Report Microservice
       summary: Upload a report file
       description: This API about uploading a report.
+      operationId: postReportUpload
       security:
         - header_auth: []
         - body_auth: []
@@ -185,6 +192,7 @@ paths:
       tags:
       - Report Microservice
       description: To list of all reports of logged in user.
+      operationId: getReportList
       security:
         - header_auth: []
         - body_auth: []
@@ -203,11 +211,14 @@ paths:
       - Report Microservice
       summary: Show report details
       description: This API is to read a report.
+      operationId: getReportRead
       security:
         - header_auth: []
         - body_auth: []
       parameters:
       - name: report_id
+        description: Report ID that is generated when uploading the report. Or, select from the report/list function.
+        example: 1
         in: path
         required: true
         schema:
@@ -229,11 +240,14 @@ paths:
       - Report Microservice
       summary: Download a report file
       description: This API is to Download a report.
+      operationId: getReportDownload
       security:
         - header_auth: []
         - body_auth: []
       parameters:
       - name: report_id
+        description: Report ID that is generated when uploading the report. Or, select from the report/list function.
+        example: 1
         in: path
         required: true
         schema:
@@ -253,15 +267,35 @@ paths:
       - Report Microservice
       summary: Update report data
       description: This API is to update a report.
+      operationId: putReportUpdateData
       security:
         - header_auth: []
         - body_auth: []
       parameters:
       - name: report_id
+        description: Report ID that is generated when uploading the report. Or, select from the report/list function.
+        example: 1
         in: path
         required: true
         schema:
           type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - description
+              - name
+              properties:
+                name:
+                  type: string
+                  description: Report Title that you want to change
+                  example: This is the report title.
+                description:
+                  type: string
+                  description: Report Description that you want to change
+                  example: This is the report description.
       responses:
         200:
           description: Request Success.
@@ -279,17 +313,15 @@ paths:
       - Report Microservice
       summary: Update a report file
       description: This API is to update a report.
+      operationId: putReportUpdateFile
       security:
         - header_auth: []
         - body_auth: []
       parameters:
       - name: report_id
+        description: Report ID that is generated when uploading the report. Or, select from the report/list function.
+        example: 1
         in: path
-        required: true
-        schema:
-          type: string
-      - name: Authentication-Token
-        in: header
         required: true
         schema:
           type: string
@@ -321,11 +353,14 @@ paths:
       - Report Microservice
       summary: Delete the specified report
       description: This API is to Delete a report.
+      operationId: deleteReport
       security:
         - header_auth: []
         - body_auth: []
       parameters:
       - name: report_id
+        description: Report ID that is generated when uploading the report. Or, select from the report/list function.
+        example: 1
         in: path
         required: true
         schema:
@@ -357,8 +392,12 @@ components:
       properties:
         current_password:
           type: string
+          description: Current password that you use now
+          example: this_should_be_a_strong_password
         new_password:
           type: string
+          description: New password that you want to use. A weak password, including the leaked passwords, will not be accepted.
+          example: this_should_also_be_a_strong_password
     TokenResponse:
       type: object
       properties:
@@ -393,12 +432,13 @@ components:
       properties:
         message:
           type: string
-          description: Success messages.
+          description: Message is used when request is successfully operated.
     user:
       type: object
       properties:
         message:
           type: string
+          example: Hello Flask Restful Example!
         email:
           type: string
           example: example@example.com
@@ -407,8 +447,12 @@ components:
       properties:
         message:
           type: string
+          description: Message is used when request is successfully operated.
+          example: Login successful. Use this auth_token when you call APIs
         auth_token:
           type: string
+          description: This authentication token is necessary when calling most of APIs.
+          example: WyI0M2Q1ZjhhNjhhOWU0Nzg0YjExNGE5NmJlNTg1OWU1YiJd.YiCyhQ._tP6VLa5fKbnftUa6AKqzs1RTHY
     ListReportResponse:
       type: object
       properties:
@@ -421,16 +465,28 @@ components:
       properties:
         id:
           type: integer
+          description: report id. This id is needed when read/download/update/delete the report.
+          example: 1
         name:
           type: string
+          description: report title.
+          example: This is the report title.
         description:
           type: string
+          description: report description.
+          example: This is the report description.
         file_name:
           type: string
+          description: file name of the attached report.
+          example: example.pdf
         url:
           type: string
+          description: the url that the file is stored.
+          example: path/to/file
         user:
           type: integer
+          description: user who uploaded the report.
+          example: 1
         created_at:
           type: string
           format: date-time
