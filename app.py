@@ -4,6 +4,7 @@ This will run the flask app.
 '''
 import sys
 from flask import Flask
+import flask_monitoringdashboard as dashboard
 
 
 def create_app(test_config=None):
@@ -16,6 +17,8 @@ def create_app(test_config=None):
     # pylint: disable=import-outside-toplevel
     # create and configure the app
     app = Flask(__name__, instance_relative_config=True)
+    dashboard.config.init_from(file='config.cfg')
+    dashboard.bind(app)
 
     with app.app_context():
         app.config.from_object("api.conf.security.BaseConfig")
